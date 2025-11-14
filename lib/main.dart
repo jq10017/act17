@@ -51,26 +51,93 @@ class _MyHomePageState extends State<MyHomePage> {
       print(value);
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
-      print(event.data.values);
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Notification"),
-              content: Text(event.notification!.body!),
-              actions: [
-                TextButton(
-                  child: Text("Ok"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    });
+  print("message received");
+
+  String? body = event.notification?.body;
+  String type = event.data['type'] ?? "regular";
+
+
+  Color bgColor;
+  IconData icon;
+  String title;
+
+  switch (type) {
+    case "important":
+      bgColor = Colors.red;
+      icon = Icons.warning;
+      title = "Important Quote";
+      break;
+
+    case "motivational":
+      bgColor = Colors.blue;
+      icon = Icons.emoji_events;
+      title = "Motivational Quote";
+      break;
+
+    case "wisdom":
+      bgColor = Colors.purple;
+      icon = Icons.lightbulb;
+      title = "Wisdom Quote";
+      break;
+
+    case "success":
+      bgColor = Colors.green;
+      icon = Icons.check_circle;
+      title = "Success Quote";
+      break;  
+
+    case "funny":
+      bgColor = Colors.orange;
+      icon = Icons.sentiment_very_satisfied;
+      title = "Funny Quote";
+      break;  
+
+    case "love":
+      bgColor = Colors.pink;
+      icon = Icons.favorite;
+      title = "Love Quote";
+      break;  
+
+    default:
+      bgColor = Colors.grey;
+      icon = Icons.message;
+      title = "Quote";
+      break;
+  }
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: backgroundColor,
+        title: Row(
+          children: [
+            Icon(icon, color: bgColor),
+            SizedBox(width: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: bgColor,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          body ?? "",
+          style: TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            child: Text("Ok", style: TextStyle(color: bgColor)),
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ],
+      );
+    },
+  );
+});
+
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
