@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: backgroundColor,
+        backgroundColor: bgColor.withOpacity(0.1),
         title: Row(
           children: [
             Icon(icon, color: bgColor),
